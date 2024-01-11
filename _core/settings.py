@@ -14,19 +14,18 @@ from pathlib import Path
 import os
 import dotenv
 import dj_database_url
+from django.core.management.utils import get_random_secret_key
 
 dotenv.load_dotenv()
-SECRET_KEY=os.getenv('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY=os.getenv('SECRET_KEY', get_random_secret_key() )
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lhai@8ltl)^qaws^8fxos3s&)85hw&##gy9z@4*3cds_y$$-(r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -95,7 +94,7 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": "127.0.0.1",
+        "HOST": 'localhost',
         "PORT": 5432,
     }
 }
@@ -108,6 +107,7 @@ if DATABASE_URL:
     DEBUG = False
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
